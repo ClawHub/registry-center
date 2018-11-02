@@ -5,8 +5,11 @@ import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-
-import javax.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
  * <Description> NettyServer <br>
@@ -16,19 +19,21 @@ import javax.annotation.PostConstruct;
  * @taskId <br>
  * @CreateDate 2018/9/20 <br>
  */
-//@Component
+@Component
 public class NettyServer {
-    public static void main(String[] args) {
-        new NettyServer().run();
-    }
 
-    @PostConstruct
-    public void initNetty() {
-        new Thread(() -> new NettyServer().run()).start();
-    }
+    /**
+     * The Port.
+     */
+    @Value("${netty.server.port}")
+    private int port;
+    /**
+     * The Logger.
+     */
+    private Logger logger = LoggerFactory.getLogger(NettyServer.class);
 
-    public void run() {
-        System.out.println("===========================Netty端口启动========");
+    public void start() {
+        logger.info("======NettyServer启动========");
         // Boss线程：由这个线程池提供的线程是boss种类的，用于创建、连接、绑定socket， （有点像门卫）然后把这些socket传给worker线程池。
         // 在服务器端每个监听的socket都有一个boss线程来处理。在客户端，只有一个boss线程来处理所有的socket。
         EventLoopGroup bossGroup = new NioEventLoopGroup();
@@ -42,11 +47,11 @@ public class NettyServer {
             b.channel(NioServerSocketChannel.class);
             // ChildChannelHandler 对出入的数据进行的业务操作,其继承ChannelInitializer
             b.childHandler(new ChildChannelHandler());
-            System.out.println("服务端开启等待客户端连接 ... ...");
-            Channel ch = b.bind(7397).sync().channel();
+            logger.info("服务端开启等待客户端连接 ... ...");
+            Channel ch = b.bind(port).sync().channel();
             ch.closeFuture().sync();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("NettyServer启动异常", e);
         } finally {
             bossGroup.shutdownGracefully();
             workGroup.shutdownGracefully();
