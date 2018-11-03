@@ -2,6 +2,7 @@ package com.clawhub.registrycenter.core.lmdb;
 
 
 import org.lmdbjava.Cursor;
+import org.lmdbjava.CursorIterator;
 import org.lmdbjava.Dbi;
 import org.lmdbjava.DbiFlags;
 import org.lmdbjava.Env;
@@ -150,6 +151,15 @@ public class LmdbTemplate {
             return db.stat(txn);
         }
 
+    }
+
+    /**
+     * Gets iterate.
+     *
+     * @return the iterate
+     */
+    public CursorIterator<ByteBuffer> getIterate() {
+        return db.iterate(env.txnWrite());
     }
 
     /**

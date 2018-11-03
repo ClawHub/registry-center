@@ -2,7 +2,7 @@ package com.clawhub.registrycenter.register;
 
 import com.alibaba.fastjson.JSONObject;
 import com.clawhub.registrycenter.core.lmdb.LmdbTemplate;
-import com.clawhub.registrycenter.register.util.RegisterKeyUtil;
+import com.clawhub.registrycenter.util.RegisterKeyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

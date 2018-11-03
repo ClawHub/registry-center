@@ -1,6 +1,9 @@
-package com.clawhub.registrycenter.register;
+package com.clawhub.registrycenter.core;
 
 import com.alibaba.fastjson.JSONObject;
+import com.clawhub.registrycenter.discover.DiscoverHandler;
+import com.clawhub.registrycenter.register.ConsumerHandler;
+import com.clawhub.registrycenter.register.ProviderHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -59,8 +62,7 @@ public class MsgDispatcher {
                 }
             } else if ("discover".equals(type)) {//服务发现
                 logger.info("服务发现...");
-                //TODO 服务被发现
-                return "服务被发现";
+                return DiscoverHandler.handle(message);
             } else {
                 return "功能类型不支持!";
             }

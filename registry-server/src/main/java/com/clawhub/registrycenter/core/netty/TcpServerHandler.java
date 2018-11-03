@@ -1,6 +1,6 @@
 package com.clawhub.registrycenter.core.netty;
 
-import com.clawhub.registrycenter.register.MsgDispatcher;
+import com.clawhub.registrycenter.core.MsgDispatcher;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerAdapter;
@@ -8,8 +8,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.ReferenceCountUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
 

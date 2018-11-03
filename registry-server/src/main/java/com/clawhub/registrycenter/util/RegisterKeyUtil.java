@@ -1,4 +1,4 @@
-package com.clawhub.registrycenter.register.util;
+package com.clawhub.registrycenter.util;
 
 /**
  * <Description>注册中心key工具类<br>
