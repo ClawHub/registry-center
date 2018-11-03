@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RegistryCenterApplication {
+public class ClientApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(RegistryCenterApplication.class, args);
+        SpringApplication.run(ClientApplication.class, args);
     }
 }

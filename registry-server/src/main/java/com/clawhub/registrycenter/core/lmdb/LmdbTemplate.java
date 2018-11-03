@@ -120,6 +120,16 @@ public class LmdbTemplate {
     }
 
     /**
+     * Put.
+     *
+     * @param key the key
+     * @param val the val
+     */
+    public void put(String key, String val) {
+        db.put(stringToByteBuffer(key), stringToByteBuffer(val));
+    }
+
+    /**
      * Delete boolean.
      *
      * @param key the key
