@@ -1,4 +1,4 @@
-package com.clawhub.registrycenter.core;
+package com.clawhub.registrycenter.core.spring;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;

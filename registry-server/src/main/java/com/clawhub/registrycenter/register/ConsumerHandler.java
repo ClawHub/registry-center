@@ -1,6 +1,6 @@
 package com.clawhub.registrycenter.register;
 
-import com.clawhub.registrycenter.core.SpringContextHelper;
+import com.clawhub.registrycenter.core.spring.SpringContextHelper;
 import com.clawhub.registrycenter.core.bdb.DataQueue;
 
 /**
