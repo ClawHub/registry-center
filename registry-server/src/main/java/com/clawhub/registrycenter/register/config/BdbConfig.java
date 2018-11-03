@@ -34,7 +34,7 @@ public class BdbConfig {
      * @author LiZhiming <br>
      * @taskId <br>
      */
-    @Bean(name = "providerQueueDbDir")
+    @Bean(name = "providerQueue")
     public DataQueue<String> providerQueueDbDir() {
         return new DataQueue<>(String.class, providerQueueDbDir, "provider");
     }
@@ -46,7 +46,7 @@ public class BdbConfig {
      * @author LiZhiming <br>
      * @taskId <br>
      */
-    @Bean(name = "customerDataQueue")
+    @Bean(name = "customerQueue")
     public DataQueue<String> customerDataQueue() {
         return new DataQueue<>(String.class, consumerQueueDbDir, "consumer");
     }

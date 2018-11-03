@@ -15,7 +15,7 @@ public class ConsumerHandler {
     /**
      * The Consumer queue.
      */
-    private static DataQueue<String> consumerQueue = (DataQueue<String>) SpringContextHelper.getBean("consumerQueueDbDir");
+    private static DataQueue<String> consumerQueue = (DataQueue<String>) SpringContextHelper.getBean("customerQueue");
 
     /**
      * Handle.

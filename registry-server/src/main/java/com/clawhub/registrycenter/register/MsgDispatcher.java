@@ -23,29 +23,48 @@ public class MsgDispatcher {
         logger.info("SERVER接收到消息:" + message);
 
         if (StringUtils.isEmpty(message)) {
+            logger.info("SERVER接收到消息为空");
             return "message is empty!";
         }
         try {
             JSONObject body = JSONObject.parseObject(message);
             String type = body.getString("type");
-            String id = body.getString("id");
-            String server = body.getString("server");
-            String ip = body.getString("ip");
-            String port = body.getString("port");
-            if (StringUtils.isEmpty(server) || StringUtils.isEmpty(ip) || StringUtils.isEmpty(port)) {
-                return "server info is empty!";
+            if (StringUtils.isEmpty(type)) {
+                logger.info("功能类型为空！");
+                return "功能类型为空!";
             }
-            if ("provider".equals(type)) {
-                //服务提供者注册
-                ProviderHandler.handle(message);
-                return id + ": provider register success!";
-            } else if ("consumer".equals(type)) {
-                //服务消费者注册
-                ConsumerHandler.handle(message);
-                return id + ": consumer register success!";
+            if ("register".equals(type)) {//服务注册
+                logger.info("服务注册...");
+                String role = body.getString("role");
+                String id = body.getString("id");
+                String server = body.getString("server");
+                String ip = body.getString("ip");
+                String port = body.getString("port");
+                if (StringUtils.isEmpty(server) || StringUtils.isEmpty(ip) || StringUtils.isEmpty(port)) {
+                    return "服务信息为空！";
+                }
+                if ("provider".equals(role)) {
+                    //服务提供者注册
+                    logger.info("服务提供者注册...");
+                    ProviderHandler.handle(message);
+                    return id + ": provider register success!";
+                } else if ("consumer".equals(role)) {
+                    //服务消费者注册
+                    logger.info("服务消费者注册...");
+                    ConsumerHandler.handle(message);
+                    return id + ": consumer register success!";
+                } else {
+                    logger.info("服务注册类型不支持!");
+                    return "服务注册类型不支持!";
+                }
+            } else if ("discover".equals(type)) {//服务发现
+                logger.info("服务发现...");
+                //TODO 服务被发现
+                return "服务被发现";
             } else {
-                return "type is not accept!";
+                return "功能类型不支持!";
             }
+
         } catch (Exception e) {
             return "message is not json!";
         }

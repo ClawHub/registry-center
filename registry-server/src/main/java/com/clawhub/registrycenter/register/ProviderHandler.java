@@ -16,7 +16,7 @@ public class ProviderHandler {
     /**
      * The Provider queue.
      */
-    private static DataQueue<String> providerQueue = (DataQueue<String>) SpringContextHelper.getBean("providerQueueDbDir");
+    private static DataQueue<String> providerQueue = (DataQueue<String>) SpringContextHelper.getBean("providerQueue");
 
     /**
      * Handle.

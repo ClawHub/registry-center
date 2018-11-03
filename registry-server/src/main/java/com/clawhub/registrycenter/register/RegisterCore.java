@@ -2,6 +2,7 @@ package com.clawhub.registrycenter.register;
 
 import com.alibaba.fastjson.JSONObject;
 import com.clawhub.registrycenter.core.lmdb.LmdbTemplate;
+import com.clawhub.registrycenter.register.util.RegisterKeyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,8 +61,11 @@ public class RegisterCore {
             while (consumerSwitch) {
                 String message = ConsumerHandler.getConsumerQueue().poll();
                 JSONObject body = JSONObject.parseObject(message);
+                String ip = body.getString("ip");
+                String port = body.getString("port");
                 String server = body.getString("server");
-                lmdbTemplate.put(server + "_consumer", message);
+                logger.info("消费者，服务: {} ,IP: {} ,端口: {} ,订阅成功", server, ip, port);
+                lmdbTemplate.put(RegisterKeyUtil.getConsumerKey(server, ip, port), message);
             }
         });
         //服务提供者线程
@@ -70,8 +74,11 @@ public class RegisterCore {
             while (providerSwitch) {
                 String message = ProviderHandler.getProviderQueue().poll();
                 JSONObject body = JSONObject.parseObject(message);
+                String ip = body.getString("ip");
+                String port = body.getString("port");
                 String server = body.getString("server");
-                lmdbTemplate.put(server + "_provider", message);
+                logger.info("提供者，服务: {} ,IP: {} ,端口: {} ,注册成功", server, ip, port);
+                lmdbTemplate.put(RegisterKeyUtil.getProviderKey(server, ip, port), message);
             }
         });
     }
