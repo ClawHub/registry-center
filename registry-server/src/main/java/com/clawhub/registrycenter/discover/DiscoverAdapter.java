@@ -26,7 +26,7 @@ public class DiscoverAdapter {
     /**
      * 服务发现
      *
-     * @param server the server
+     * @param server the service
      * @return the string
      */
     public String discover(String server) {

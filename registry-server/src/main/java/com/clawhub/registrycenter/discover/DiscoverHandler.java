@@ -20,7 +20,7 @@ public class DiscoverHandler {
     /**
      * 服务发现
      *
-     * @param server server
+     * @param server service
      * @return the string
      */
     public static String handle(String server) {

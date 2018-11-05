@@ -48,4 +48,9 @@ public class ParamConstant {
      * 不活跃的
      */
     public static final String UN_ACTIVE = "0";
+
+    /**
+     * 下划线
+     */
+    public static final String UNDER_LINE = "_";
 }

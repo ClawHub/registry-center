@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -69,7 +70,7 @@ public class ClientPool {
     /**
      * 服务发现
      *
-     * @param server the server
+     * @param server the service
      * @return the list
      */
     public List<String> discover(String server) {
@@ -84,5 +85,24 @@ public class ClientPool {
             }
         }
         return serverList;
+    }
+
+    /**
+     * Get string.
+     *
+     * @param key the key
+     * @return the string
+     */
+    public String get(String key) {
+        return lmdbTemplate.getTxnRead(key);
+    }
+
+    /**
+     * Gets all key.
+     *
+     * @return the all key
+     */
+    public Set<String> getAllKey() {
+        return poll.keySet();
     }
 }

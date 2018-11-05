@@ -68,7 +68,7 @@ public class InitApplicationRunner implements ApplicationRunner {
             logger.info("服务发现测试开始...");
             JSONObject discover = new JSONObject();
             discover.put("type", ParamConstant.TYPE_DISCOVER);
-            discover.put("server", "com.clawhub.demo.TcpTest");
+            discover.put("service", "com.clawhub.demo.TcpTest");
             nettyTCPClient.sendMsg(discover.toJSONString());
             logger.info("服务发现测试结束...");
 

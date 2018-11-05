@@ -52,7 +52,7 @@ public class MsgDispatcher {
                 return RegisterHandler.handle(info);
             } else if (ParamConstant.TYPE_DISCOVER.equals(type)) { //服务发现
                 logger.info("服务发现...");
-                String server = body.getString("server");
+                String server = body.getString("service");
                 return DiscoverHandler.handle(server);
             } else if (ParamConstant.TYPE_HEARTBEAT.equals(type)) { //心跳
                 logger.info("心跳...");

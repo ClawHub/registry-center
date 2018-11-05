@@ -1,6 +1,7 @@
 package com.clawhub.registrycenter.util;
 
 import com.clawhub.registrycenter.client.ClientBean;
+import com.clawhub.registrycenter.constant.ParamConstant;
 
 /**
  * <Description>注册中心key工具类<br>
@@ -16,13 +17,13 @@ public class RegisterKeyUtil {
      * Gets key.
      *
      * @param role   the role
-     * @param server the server
+     * @param server the service
      * @param ip     the ip
      * @param port   the port
      * @return the key
      */
     public static String getKey(String role, String server, String ip, String port) {
-        return role + "_" + server + "_" + ip + "_" + port;
+        return role + ParamConstant.UNDER_LINE + server + ParamConstant.UNDER_LINE + ip + ParamConstant.UNDER_LINE + port;
     }
 
     /**

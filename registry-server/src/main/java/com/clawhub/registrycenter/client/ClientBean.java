@@ -80,18 +80,18 @@ public class ClientBean {
     }
 
     /**
-     * Gets server.
+     * Gets service.
      *
-     * @return the server
+     * @return the service
      */
     public String getServer() {
         return server;
     }
 
     /**
-     * Sets server.
+     * Sets service.
      *
-     * @param server the server
+     * @param server the service
      */
     public void setServer(String server) {
         this.server = server;
