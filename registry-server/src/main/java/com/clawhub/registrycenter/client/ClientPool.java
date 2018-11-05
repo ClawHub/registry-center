@@ -98,6 +98,16 @@ public class ClientPool {
     }
 
     /**
+     * Put.
+     *
+     * @param key the key
+     * @param val the val
+     */
+    public void put(String key, String val) {
+        lmdbTemplate.put(key, val);
+    }
+
+    /**
      * Gets all key.
      *
      * @return the all key

@@ -1,5 +1,7 @@
 package com.clawhub.registrycenter.service;
 
+import com.clawhub.registrycenter.client.ClientBean;
+
 import java.util.Set;
 
 /**
@@ -26,4 +28,11 @@ public interface ServerService {
      * @return 所有所有客户端
      */
     Set<String> getAllClient(String server);
+
+    /**
+     * 改变客户端状态
+     *
+     * @param clientBean 客户端信息
+     */
+    void changeActive(ClientBean clientBean);
 }

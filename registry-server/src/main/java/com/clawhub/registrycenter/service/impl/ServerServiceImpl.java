@@ -1,8 +1,11 @@
 package com.clawhub.registrycenter.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
+import com.clawhub.registrycenter.client.ClientBean;
 import com.clawhub.registrycenter.client.ClientPool;
 import com.clawhub.registrycenter.constant.ParamConstant;
 import com.clawhub.registrycenter.service.ServerService;
+import com.clawhub.registrycenter.util.RegisterKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,4 +53,12 @@ public class ServerServiceImpl implements ServerService {
         }
         return allClient;
     }
+
+    @Override
+    public void changeActive(ClientBean clientBean) {
+        String key = RegisterKeyUtil.getKey(clientBean);
+        clientPool.put(key, JSONObject.toJSONString(clientBean));
+    }
+
+
 }
