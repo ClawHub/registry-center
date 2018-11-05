@@ -2,8 +2,10 @@ package com.clawhub.registrycenter.core;
 
 import com.alibaba.fastjson.JSONObject;
 import com.clawhub.registrycenter.discover.DiscoverHandler;
+import com.clawhub.registrycenter.heartbeat.HeartbeatHandler;
 import com.clawhub.registrycenter.register.ConsumerHandler;
 import com.clawhub.registrycenter.register.ProviderHandler;
+import com.clawhub.registrycenter.register.RegisterHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -38,31 +40,13 @@ public class MsgDispatcher {
             }
             if ("register".equals(type)) {//服务注册
                 logger.info("服务注册...");
-                String role = body.getString("role");
-                String id = body.getString("id");
-                String server = body.getString("server");
-                String ip = body.getString("ip");
-                String port = body.getString("port");
-                if (StringUtils.isEmpty(server) || StringUtils.isEmpty(ip) || StringUtils.isEmpty(port)) {
-                    return "服务信息为空！";
-                }
-                if ("provider".equals(role)) {
-                    //服务提供者注册
-                    logger.info("服务提供者注册...");
-                    ProviderHandler.handle(message);
-                    return id + ": provider register success!";
-                } else if ("consumer".equals(role)) {
-                    //服务消费者注册
-                    logger.info("服务消费者注册...");
-                    ConsumerHandler.handle(message);
-                    return id + ": consumer register success!";
-                } else {
-                    logger.info("服务注册类型不支持!");
-                    return "服务注册类型不支持!";
-                }
+                return RegisterHandler.handle(message);
             } else if ("discover".equals(type)) {//服务发现
                 logger.info("服务发现...");
                 return DiscoverHandler.handle(message);
+            } else if ("heartbeat".equals(type)) {//心跳
+                logger.info("心跳...");
+                return HeartbeatHandler.handle(message);
             } else {
                 return "功能类型不支持!";
             }

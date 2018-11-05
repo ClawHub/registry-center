@@ -24,6 +24,12 @@ public class DiscoverAdapter {
     @Autowired
     private LmdbTemplate lmdbTemplate;
 
+    /**
+     * 服务发现
+     *
+     * @param server the server
+     * @return the string
+     */
     public String discover(String server) {
         //获取所有服务提供者
         List<String> providerInfos = new ArrayList<>();

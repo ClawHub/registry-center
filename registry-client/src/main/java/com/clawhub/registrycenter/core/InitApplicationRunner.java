@@ -39,6 +39,7 @@ public class InitApplicationRunner implements ApplicationRunner {
         logger.info("TCP客户端测试...");
         try {
             long t0 = System.nanoTime();
+            //服务注册
             for (int i = 0; i < 3; i++) {
                 JSONObject body = new JSONObject();
                 body.put("type", "register");
@@ -52,12 +53,17 @@ public class InitApplicationRunner implements ApplicationRunner {
                 body.put("ip", "192.168.0.1");
                 body.put("port", "8080");
                 nettyTCPClient.sendMsg(body.toJSONString());
-
-                JSONObject body1 = new JSONObject();
-                body1.put("type", "discover");
-                body1.put("server", "com.clawhub.demo.TcpTest");
-                nettyTCPClient.sendMsg(body1.toJSONString());
             }
+
+            //服务发现
+            JSONObject body1 = new JSONObject();
+            body1.put("type", "discover");
+            body1.put("server", "com.clawhub.demo.TcpTest");
+            nettyTCPClient.sendMsg(body1.toJSONString());
+
+
+            //心跳
+
             long t1 = System.nanoTime();
             System.out.println((t1 - t0) / 1000000.0);
             Thread.sleep(5000);

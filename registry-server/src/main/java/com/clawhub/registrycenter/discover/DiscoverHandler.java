@@ -18,6 +18,12 @@ public class DiscoverHandler {
      */
     private static DiscoverAdapter discoverAdapter = (DiscoverAdapter) SpringContextHelper.getBean("discoverAdapter");
 
+    /**
+     * 服务发现
+     *
+     * @param message the message
+     * @return the string
+     */
     public static String handle(String message) {
         JSONObject body = JSONObject.parseObject(message);
         String server = body.getString("server");
