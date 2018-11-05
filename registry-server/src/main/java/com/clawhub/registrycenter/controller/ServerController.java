@@ -39,10 +39,15 @@ public class ServerController {
         return JSONObject.toJSONString(set);
     }
 
+    /**
+     * 获取服务的提供者与消费者
+     *
+     * @param server 服务名
+     * @return 服务的提供者与消费者
+     */
     @GetMapping("getAllClient/{server}")
     public String getAllClient(@PathVariable("server") String server) {
         Set<String> set = serverService.getAllClient(server);
         return JSONObject.toJSONString(set);
     }
-
 }
