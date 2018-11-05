@@ -1,5 +1,6 @@
 package com.clawhub.registrycenter.client;
 
+import com.alibaba.fastjson.JSONObject;
 import com.clawhub.registrycenter.core.lmdb.LmdbTemplate;
 import com.clawhub.registrycenter.util.RegisterKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,15 +74,15 @@ public class ClientPool {
      * @param server the service
      * @return the list
      */
-    public List<String> discover(String server) {
-        List<String> serverList = new ArrayList<>();
+    public List<ClientBean> discover(String server) {
+        List<ClientBean> serverList = new ArrayList<>();
         for (Map.Entry<String, Long> entry : poll.entrySet()) {
             String key = entry.getKey();
             String value;
             if (key.startsWith("provider_" + server)) {
                 //lmdb获取服务信息
                 value = lmdbTemplate.getTxnRead(key);
-                serverList.add(value);
+                serverList.add(JSONObject.parseObject(value, ClientBean.class));
             }
         }
         return serverList;
