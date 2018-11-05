@@ -1,6 +1,7 @@
 package com.clawhub.registrycenter.register;
 
 import com.alibaba.fastjson.JSONObject;
+import com.clawhub.registrycenter.core.ClientBean;
 import com.clawhub.registrycenter.core.MsgDispatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,29 +24,27 @@ public class RegisterHandler {
     /**
      * 服务注册
      *
-     * @param message the message
+     * @param info info
      * @return the string
      */
-    public static String handle(String message) {
-        JSONObject body = JSONObject.parseObject(message);
-        String role = body.getString("role");
-        String id = body.getString("id");
-        String server = body.getString("server");
-        String ip = body.getString("ip");
-        String port = body.getString("port");
+    public static String handle(ClientBean info) {
+        String role = info.getRole();
+        String server = info.getServer();
+        String ip = info.getIp();
+        String port = info.getPort();
         if (StringUtils.isEmpty(server) || StringUtils.isEmpty(ip) || StringUtils.isEmpty(port)) {
             return "服务信息为空！";
         }
         if ("provider".equals(role)) {
             //服务提供者注册
             logger.info("服务提供者注册...");
-            ProviderHandler.handle(message);
-            return id + ": provider register success!";
+            ProviderQueue.handle(JSONObject.toJSONString(info));
+            return "provider register success!";
         } else if ("consumer".equals(role)) {
             //服务消费者注册
             logger.info("服务消费者注册...");
-            ConsumerHandler.handle(message);
-            return id + ": consumer register success!";
+            ConsumerQueue.handle(JSONObject.toJSONString(info));
+            return "consumer register success!";
         } else {
             logger.info("服务注册类型不支持!");
             return "服务注册类型不支持!";

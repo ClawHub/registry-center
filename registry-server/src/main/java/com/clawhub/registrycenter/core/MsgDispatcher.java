@@ -3,12 +3,12 @@ package com.clawhub.registrycenter.core;
 import com.alibaba.fastjson.JSONObject;
 import com.clawhub.registrycenter.discover.DiscoverHandler;
 import com.clawhub.registrycenter.heartbeat.HeartbeatHandler;
-import com.clawhub.registrycenter.register.ConsumerHandler;
-import com.clawhub.registrycenter.register.ProviderHandler;
 import com.clawhub.registrycenter.register.RegisterHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
+
+import java.util.List;
 
 /**
  * <Description>客户端消息中转站<br>
@@ -40,13 +40,16 @@ public class MsgDispatcher {
             }
             if ("register".equals(type)) {//服务注册
                 logger.info("服务注册...");
-                return RegisterHandler.handle(message);
+                ClientBean info = body.getJSONObject("info").toJavaObject(ClientBean.class);
+                return RegisterHandler.handle(info);
             } else if ("discover".equals(type)) {//服务发现
                 logger.info("服务发现...");
-                return DiscoverHandler.handle(message);
+                String server = body.getString("server");
+                return DiscoverHandler.handle(server);
             } else if ("heartbeat".equals(type)) {//心跳
                 logger.info("心跳...");
-                return HeartbeatHandler.handle(message);
+                List<ClientBean> infos = body.getJSONArray("infos").toJavaList(ClientBean.class);
+                return HeartbeatHandler.handle(infos);
             } else {
                 return "功能类型不支持!";
             }

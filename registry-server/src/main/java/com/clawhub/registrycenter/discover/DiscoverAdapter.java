@@ -1,13 +1,9 @@
 package com.clawhub.registrycenter.discover;
 
-import com.clawhub.registrycenter.core.lmdb.LmdbTemplate;
-import org.lmdbjava.Cursor;
-import org.lmdbjava.CursorIterator;
+import com.clawhub.registrycenter.core.ClientPool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,7 +18,7 @@ import java.util.List;
 public class DiscoverAdapter {
 
     @Autowired
-    private LmdbTemplate lmdbTemplate;
+    private ClientPool clientPool;
 
     /**
      * 服务发现
@@ -32,15 +28,9 @@ public class DiscoverAdapter {
      */
     public String discover(String server) {
         //获取所有服务提供者
-        List<String> providerInfos = new ArrayList<>();
-        CursorIterator<ByteBuffer> iterator = lmdbTemplate.getIterate();
-        while (iterator.hasNext()) {
-            CursorIterator.KeyVal<ByteBuffer> keyVal = iterator.next();
-            String key = lmdbTemplate.byteBufferToString(keyVal.key());
-            if (key.startsWith("provider_" + server)) {
-                providerInfos.add(lmdbTemplate.byteBufferToString(keyVal.val()));
-            }
-        }
+        List<String> providerInfos = clientPool.discover(server);
+
+
         //负载均衡
 
         //返回一个可用的服务提供者

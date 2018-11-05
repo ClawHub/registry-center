@@ -1,7 +1,7 @@
 package com.clawhub.registrycenter.register;
 
-import com.clawhub.registrycenter.core.spring.SpringContextHelper;
 import com.clawhub.registrycenter.core.bdb.DataQueue;
+import com.clawhub.registrycenter.core.spring.SpringContextHelper;
 
 /**
  * <Description>生产者处理<br>
@@ -11,12 +11,12 @@ import com.clawhub.registrycenter.core.bdb.DataQueue;
  * @taskId <br>
  * @CreateDate 2018/11/3 13:52 <br>
  */
-public class ProviderHandler {
+public class ProviderQueue {
 
     /**
      * The Provider queue.
      */
-    private static DataQueue<String> providerQueue = (DataQueue<String>) SpringContextHelper.getBean("providerQueue");
+    private static DataQueue<String> queue = (DataQueue<String>) SpringContextHelper.getBean("providerQueue");
 
     /**
      * Handle.
@@ -24,15 +24,15 @@ public class ProviderHandler {
      * @param message the message
      */
     public static void handle(String message) {
-        providerQueue.generate(message);
+        queue.generate(message);
     }
 
     /**
-     * Gets provider queue.
+     * Gets queue.
      *
-     * @return the provider queue
+     * @return the queue
      */
-    public static DataQueue<String> getProviderQueue() {
-        return providerQueue;
+    public static DataQueue<String> getQueue() {
+        return queue;
     }
 }

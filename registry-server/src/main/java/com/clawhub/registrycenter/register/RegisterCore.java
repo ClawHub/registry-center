@@ -1,7 +1,8 @@
 package com.clawhub.registrycenter.register;
 
 import com.alibaba.fastjson.JSONObject;
-import com.clawhub.registrycenter.core.lmdb.LmdbTemplate;
+import com.clawhub.registrycenter.core.ClientBean;
+import com.clawhub.registrycenter.core.ClientPool;
 import com.clawhub.registrycenter.util.RegisterKeyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,11 +40,13 @@ public class RegisterCore {
      */
     @Value("${register.provider.queue.poll.switch}")
     private Boolean providerSwitch;
+
+
     /**
-     * The Lmdb template.
+     * The Client pool.
      */
     @Autowired
-    private LmdbTemplate lmdbTemplate;
+    private ClientPool clientPool;
     /**
      * The New fixed thread pool.
      */
@@ -59,26 +62,30 @@ public class RegisterCore {
         logger.info("服务消费者线程启动...");
         newFixedThreadPool.submit(() -> {
             while (consumerSwitch) {
-                String message = ConsumerHandler.getConsumerQueue().poll();
-                JSONObject body = JSONObject.parseObject(message);
-                String ip = body.getString("ip");
-                String port = body.getString("port");
-                String server = body.getString("server");
-                logger.info("消费者，服务: {} ,IP: {} ,端口: {} ,订阅成功", server, ip, port);
-                lmdbTemplate.put(RegisterKeyUtil.getConsumerKey(server, ip, port), message);
+                String message = ConsumerQueue.getQueue().poll();
+                ClientBean clientBean = JSONObject.parseObject(message, ClientBean.class);
+                String ip = clientBean.getIp();
+                String port = clientBean.getPort();
+                String server = clientBean.getServer();
+                String role = clientBean.getRole();
+                logger.info("角色：{}，服务: {} ,IP: {} ,端口: {} ,订阅成功", role, server, ip, port);
+                String consumerKey = RegisterKeyUtil.getKey(role, server, ip, port);
+                clientPool.register(consumerKey, JSONObject.toJSONString(clientBean));
             }
         });
         //服务提供者线程
         logger.info("服务提供者线程启动...");
         newFixedThreadPool.submit(() -> {
             while (providerSwitch) {
-                String message = ProviderHandler.getProviderQueue().poll();
-                JSONObject body = JSONObject.parseObject(message);
-                String ip = body.getString("ip");
-                String port = body.getString("port");
-                String server = body.getString("server");
-                logger.info("提供者，服务: {} ,IP: {} ,端口: {} ,注册成功", server, ip, port);
-                lmdbTemplate.put(RegisterKeyUtil.getProviderKey(server, ip, port), message);
+                String message = ProviderQueue.getQueue().poll();
+                ClientBean clientBean = JSONObject.parseObject(message, ClientBean.class);
+                String ip = clientBean.getIp();
+                String port = clientBean.getPort();
+                String server = clientBean.getServer();
+                String role = clientBean.getRole();
+                logger.info("角色：{}，服务: {} ,IP: {} ,端口: {} ,注册成功", role, server, ip, port);
+                String providerKey = RegisterKeyUtil.getKey(role, server, ip, port);
+                clientPool.register(providerKey, JSONObject.toJSONString(clientBean));
             }
         });
     }

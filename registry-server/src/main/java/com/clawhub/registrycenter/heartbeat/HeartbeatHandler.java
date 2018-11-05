@@ -1,5 +1,10 @@
 package com.clawhub.registrycenter.heartbeat;
 
+import com.clawhub.registrycenter.core.ClientBean;
+import com.clawhub.registrycenter.core.spring.SpringContextHelper;
+
+import java.util.List;
+
 /**
  * <Description>心跳处理<br>
  *
@@ -9,14 +14,21 @@ package com.clawhub.registrycenter.heartbeat;
  * @CreateDate 2018/11/5 13:41 <br>
  */
 public class HeartbeatHandler {
+    /**
+     * The constant heartbeatAdapter.
+     */
+    private static HeartbeatAdapter heartbeatAdapter = (HeartbeatAdapter) SpringContextHelper.getBean("heartbeatAdapter");
 
     /**
      * 心跳处理
      *
-     * @param message the message
+     * @param infos infos
      * @return the string
      */
-    public static String handle(String message) {
-        return message;
+    public static String handle(List<ClientBean> infos) {
+        for (ClientBean info : infos) {
+            heartbeatAdapter.heartBeat(info);
+        }
+        return "success";
     }
 }

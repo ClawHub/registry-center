@@ -1,6 +1,5 @@
 package com.clawhub.registrycenter.discover;
 
-import com.alibaba.fastjson.JSONObject;
 import com.clawhub.registrycenter.core.spring.SpringContextHelper;
 
 /**
@@ -21,12 +20,10 @@ public class DiscoverHandler {
     /**
      * 服务发现
      *
-     * @param message the message
+     * @param server server
      * @return the string
      */
-    public static String handle(String message) {
-        JSONObject body = JSONObject.parseObject(message);
-        String server = body.getString("server");
+    public static String handle(String server) {
         return discoverAdapter.discover(server);
     }
 }
