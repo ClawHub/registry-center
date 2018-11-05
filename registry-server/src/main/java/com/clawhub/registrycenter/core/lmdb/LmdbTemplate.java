@@ -1,6 +1,7 @@
 package com.clawhub.registrycenter.core.lmdb;
 
 
+import com.clawhub.registrycenter.constant.ParamConstant;
 import org.lmdbjava.Cursor;
 import org.lmdbjava.CursorIterator;
 import org.lmdbjava.Dbi;
@@ -52,19 +53,19 @@ public class LmdbTemplate {
      * The Path.
      */
     @Value("${lmdb.file.path}")
-    public String path;
+    private String path;
 
     /**
      * The Db name.
      */
     @Value("${lmdb.db.name}")
-    public String dbName;
+    private String dbName;
 
     /**
      * The Map size.
      */
     @Value("${lmdb.map.size}")
-    public Long mapSize;
+    private Long mapSize;
 
     /**
      * 项目启动时初始化LMDB环境与新建DB
@@ -72,7 +73,7 @@ public class LmdbTemplate {
     @PostConstruct
     public void init() {
         env = create()
-                .setMapSize(mapSize * 1024 * 1024)
+                .setMapSize(mapSize * ParamConstant.ONE_THOUSAND_AND_TWENTY_FOUR * ParamConstant.ONE_THOUSAND_AND_TWENTY_FOUR)
                 .setMaxReaders(1)
                 .setMaxDbs(1)
                 .open(new File(path), EnvFlags.MDB_FIXEDMAP, EnvFlags.MDB_WRITEMAP);

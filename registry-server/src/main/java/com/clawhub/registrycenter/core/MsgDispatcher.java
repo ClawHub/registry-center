@@ -1,6 +1,8 @@
 package com.clawhub.registrycenter.core;
 
 import com.alibaba.fastjson.JSONObject;
+import com.clawhub.registrycenter.client.ClientBean;
+import com.clawhub.registrycenter.constant.ParamConstant;
 import com.clawhub.registrycenter.discover.DiscoverHandler;
 import com.clawhub.registrycenter.heartbeat.HeartbeatHandler;
 import com.clawhub.registrycenter.register.RegisterHandler;
@@ -24,12 +26,18 @@ public class MsgDispatcher {
      */
     private static Logger logger = LoggerFactory.getLogger(MsgDispatcher.class);
 
+    /**
+     * Process string.
+     *
+     * @param message the message
+     * @return the string
+     */
     public static String process(String message) {
         logger.info("SERVER接收到消息:" + message);
 
         if (StringUtils.isEmpty(message)) {
             logger.info("SERVER接收到消息为空");
-            return "message is empty!";
+            return "参数为空";
         }
         try {
             JSONObject body = JSONObject.parseObject(message);
@@ -38,15 +46,15 @@ public class MsgDispatcher {
                 logger.info("功能类型为空！");
                 return "功能类型为空!";
             }
-            if ("register".equals(type)) {//服务注册
+            if (ParamConstant.TYPE_REGISTER.equals(type)) { //服务注册
                 logger.info("服务注册...");
                 ClientBean info = body.getJSONObject("info").toJavaObject(ClientBean.class);
                 return RegisterHandler.handle(info);
-            } else if ("discover".equals(type)) {//服务发现
+            } else if (ParamConstant.TYPE_DISCOVER.equals(type)) { //服务发现
                 logger.info("服务发现...");
                 String server = body.getString("server");
                 return DiscoverHandler.handle(server);
-            } else if ("heartbeat".equals(type)) {//心跳
+            } else if (ParamConstant.TYPE_HEARTBEAT.equals(type)) { //心跳
                 logger.info("心跳...");
                 List<ClientBean> infos = body.getJSONArray("infos").toJavaList(ClientBean.class);
                 return HeartbeatHandler.handle(infos);
@@ -55,7 +63,7 @@ public class MsgDispatcher {
             }
 
         } catch (Exception e) {
-            return "message is not json!";
+            return "参数异常";
         }
     }
 

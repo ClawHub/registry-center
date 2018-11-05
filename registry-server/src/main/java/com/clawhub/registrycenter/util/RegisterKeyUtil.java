@@ -1,6 +1,6 @@
 package com.clawhub.registrycenter.util;
 
-import com.clawhub.registrycenter.core.ClientBean;
+import com.clawhub.registrycenter.client.ClientBean;
 
 /**
  * <Description>注册中心key工具类<br>
@@ -12,10 +12,25 @@ import com.clawhub.registrycenter.core.ClientBean;
  */
 public class RegisterKeyUtil {
 
+    /**
+     * Gets key.
+     *
+     * @param role   the role
+     * @param server the server
+     * @param ip     the ip
+     * @param port   the port
+     * @return the key
+     */
     public static String getKey(String role, String server, String ip, String port) {
         return role + "_" + server + "_" + ip + "_" + port;
     }
 
+    /**
+     * Gets key.
+     *
+     * @param info the info
+     * @return the key
+     */
     public static String getKey(ClientBean info) {
         return info.getRole() + "_" + info.getServer() + "_" + info.getIp() + "_" + info.getPort();
     }

@@ -1,7 +1,8 @@
 package com.clawhub.registrycenter.register;
 
 import com.alibaba.fastjson.JSONObject;
-import com.clawhub.registrycenter.core.ClientBean;
+import com.clawhub.registrycenter.client.ClientBean;
+import com.clawhub.registrycenter.constant.ParamConstant;
 import com.clawhub.registrycenter.core.MsgDispatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,12 +36,12 @@ public class RegisterHandler {
         if (StringUtils.isEmpty(server) || StringUtils.isEmpty(ip) || StringUtils.isEmpty(port)) {
             return "服务信息为空！";
         }
-        if ("provider".equals(role)) {
+        if (ParamConstant.ROLE_PROVIDER.equals(role)) {
             //服务提供者注册
             logger.info("服务提供者注册...");
             ProviderQueue.handle(JSONObject.toJSONString(info));
             return "provider register success!";
-        } else if ("consumer".equals(role)) {
+        } else if (ParamConstant.ROLE_CONSUMER.equals(role)) {
             //服务消费者注册
             logger.info("服务消费者注册...");
             ConsumerQueue.handle(JSONObject.toJSONString(info));

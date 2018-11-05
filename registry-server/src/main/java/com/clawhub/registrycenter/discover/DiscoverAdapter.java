@@ -1,6 +1,6 @@
 package com.clawhub.registrycenter.discover;
 
-import com.clawhub.registrycenter.core.ClientPool;
+import com.clawhub.registrycenter.client.ClientPool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +17,9 @@ import java.util.List;
 @Component
 public class DiscoverAdapter {
 
+    /**
+     * The Client pool.
+     */
     @Autowired
     private ClientPool clientPool;
 
@@ -29,7 +32,6 @@ public class DiscoverAdapter {
     public String discover(String server) {
         //获取所有服务提供者
         List<String> providerInfos = clientPool.discover(server);
-
 
         //负载均衡
 

@@ -1,7 +1,7 @@
 package com.clawhub.registrycenter.heartbeat;
 
-import com.clawhub.registrycenter.core.ClientBean;
-import com.clawhub.registrycenter.core.ClientPool;
+import com.clawhub.registrycenter.client.ClientBean;
+import com.clawhub.registrycenter.client.ClientPool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +22,11 @@ public class HeartbeatAdapter {
     @Autowired
     private ClientPool clientPool;
 
+    /**
+     * Heart beat.
+     *
+     * @param info the info
+     */
     public void heartBeat(ClientBean info) {
         clientPool.heartBeat(info);
     }

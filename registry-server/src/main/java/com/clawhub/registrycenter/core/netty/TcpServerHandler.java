@@ -39,7 +39,7 @@ public class TcpServerHandler extends ChannelHandlerAdapter {
             try {
                 dest = (response).getBytes("UTF-8");
             } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+                logger.error("Unsupported Encoding Exception", e);
             }
             ByteBuf destBuf = ctx.alloc().buffer(dest.length);
             destBuf.writeBytes(dest);

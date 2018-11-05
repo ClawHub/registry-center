@@ -1,5 +1,6 @@
 package com.clawhub.registrycenter.core.netty;
 
+import com.clawhub.registrycenter.constant.ParamConstant;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -42,6 +43,9 @@ public class NettyTCPClient {
     @Value("${netty.tcp.server.port}")
     private int port;
 
+    /**
+     * The Bootstrap.
+     */
     private Bootstrap bootstrap;
 
     /**
@@ -55,8 +59,8 @@ public class NettyTCPClient {
             @Override
             protected void initChannel(Channel ch) {
                 ChannelPipeline pipeline = ch.pipeline();
-                pipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));
-                pipeline.addLast("frameEncoder", new LengthFieldPrepender(4));
+                pipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, ParamConstant.FOUR, 0, ParamConstant.FOUR));
+                pipeline.addLast("frameEncoder", new LengthFieldPrepender(ParamConstant.FOUR));
                 pipeline.addLast("handler", new TcpClientHandler());
             }
         });
@@ -97,5 +101,4 @@ public class NettyTCPClient {
         buf.writeBytes(value);
         channel.writeAndFlush(buf).sync();
     }
-
 }

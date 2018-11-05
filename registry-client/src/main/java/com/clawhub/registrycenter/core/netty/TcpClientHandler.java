@@ -16,7 +16,10 @@ import org.slf4j.LoggerFactory;
  * @CreateDate 2018/11/3 10:53 <br>
  */
 public class TcpClientHandler extends ChannelHandlerAdapter {
-    private static final Logger logger = LoggerFactory.getLogger(TcpClientHandler.class);
+    /**
+     * The constant LOGGER.
+     */
+    public static final Logger LOGGER = LoggerFactory.getLogger(TcpClientHandler.class);
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
@@ -24,13 +27,11 @@ public class TcpClientHandler extends ChannelHandlerAdapter {
             ByteBuf buf = (ByteBuf) msg;
             byte[] dst = new byte[buf.capacity()];
             buf.readBytes(dst);
-            logger.info("client接收到服务器返回的消息:" + new String(dst));
+            LOGGER.info("client接收到服务器返回的消息:" + new String(dst));
             ReferenceCountUtil.release(msg);
         } else {
-            logger.warn("error object");
+            LOGGER.warn("error object");
         }
 
     }
-
-
 }

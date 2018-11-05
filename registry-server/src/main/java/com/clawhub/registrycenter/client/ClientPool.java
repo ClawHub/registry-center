@@ -1,4 +1,4 @@
-package com.clawhub.registrycenter.core;
+package com.clawhub.registrycenter.client;
 
 import com.clawhub.registrycenter.core.lmdb.LmdbTemplate;
 import com.clawhub.registrycenter.util.RegisterKeyUtil;

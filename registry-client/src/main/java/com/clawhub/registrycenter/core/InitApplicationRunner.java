@@ -1,6 +1,7 @@
 package com.clawhub.registrycenter.core;
 
 import com.alibaba.fastjson.JSONObject;
+import com.clawhub.registrycenter.constant.ParamConstant;
 import com.clawhub.registrycenter.core.netty.NettyTCPClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,9 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <Description>系统启动后执行<br>
@@ -37,41 +41,50 @@ public class InitApplicationRunner implements ApplicationRunner {
         nettyTCPClient.init();
 
         logger.info("TCP客户端测试...");
+        List<ClientBean> clientBeans = new ArrayList<>();
         try {
-            long t0 = System.nanoTime();
             //服务注册
-            for (int i = 0; i < 3; i++) {
-                JSONObject body = new JSONObject();
-                body.put("type", "register");
-                body.put("id", String.valueOf(i));
+            logger.info("服务注册测试开始...");
+            for (int i = 0; i < 10; i++) {
+                JSONObject register = new JSONObject();
+                register.put("type", ParamConstant.TYPE_REGISTER);
+                ClientBean clientBean = new ClientBean();
                 if (i % 2 == 0) {
-                    body.put("role", "consumer");
+                    clientBean.setRole(ParamConstant.ROLE_CONSUMER);
                 } else {
-                    body.put("role", "provider");
+                    clientBean.setRole(ParamConstant.ROLE_PROVIDER);
                 }
-                body.put("server", "com.clawhub.demo.TcpTest");
-                body.put("ip", "192.168.0.1");
-                body.put("port", "8080");
-                nettyTCPClient.sendMsg(body.toJSONString());
+                clientBean.setServer("com.clawhub.demo.TcpTest");
+                clientBean.setIp("192.168.0.1");
+                clientBean.setPort("8080");
+                clientBean.setActive(ParamConstant.ACTIVE);
+                clientBeans.add(clientBean);
+                register.put("info", JSONObject.toJSONString(clientBean));
+                nettyTCPClient.sendMsg(register.toJSONString());
+                logger.info("服务注册测试结束...");
             }
 
             //服务发现
-            JSONObject body1 = new JSONObject();
-            body1.put("type", "discover");
-            body1.put("server", "com.clawhub.demo.TcpTest");
-            nettyTCPClient.sendMsg(body1.toJSONString());
-
+            logger.info("服务发现测试开始...");
+            JSONObject discover = new JSONObject();
+            discover.put("type", ParamConstant.TYPE_DISCOVER);
+            discover.put("server", "com.clawhub.demo.TcpTest");
+            nettyTCPClient.sendMsg(discover.toJSONString());
+            logger.info("服务发现测试结束...");
 
             //心跳
-
-            long t1 = System.nanoTime();
-            System.out.println((t1 - t0) / 1000000.0);
-            Thread.sleep(5000);
-            System.exit(0);
+            logger.info("心跳测试开始...");
+            for (int i = 0; i < 10; i++) {
+                logger.info("第 {} 心跳", i);
+                JSONObject heartbeat = new JSONObject();
+                heartbeat.put("type", ParamConstant.TYPE_HEARTBEAT);
+                heartbeat.put("infos", JSONObject.toJSONString(clientBeans));
+                nettyTCPClient.sendMsg(heartbeat.toJSONString());
+                Thread.sleep(3000);
+            }
+            logger.info("心跳测试结束...");
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("TCP客户端出错...", e);
         }
-
-
     }
 }

@@ -1,5 +1,6 @@
 package com.clawhub.registrycenter.core.netty;
 
+import com.clawhub.registrycenter.constant.ParamConstant;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -49,7 +50,16 @@ public class NettyTCPServer {
     /**
      * 业务出现线程大小
      */
-    private int workerGroupSize = 1000;
+    @Value("${netty.tcp.server.worker.group.size}")
+    private int workerGroupSize;
+    /**
+     * BACKLOG用于构造服务端套接字ServerSocket对象，
+     * 标识当服务器请求处理线程全满时，用于临时存放已完成三次握手的请求的队列的最大长度。
+     * 如果未设置或所设置的值小于1，Java将使用默认值50。
+     */
+    @Value("${netty.tcp.server.so.backlog}")
+    private int soBacklog;
+
     /**
      * Boss线程：由这个线程池提供的线程是boss种类的，用于创建、连接、绑定socket， （有点像门卫）然后把这些socket传给worker线程池。
      * 在服务器端每个监听的socket都有一个boss线程来处理。在客户端，只有一个boss线程来处理所有的socket。
@@ -77,14 +87,14 @@ public class NettyTCPServer {
             public void initChannel(SocketChannel ch) {
                 ChannelPipeline pipeline = ch.pipeline();
                 //通用TCP黏包解决方案
-                pipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));
-                pipeline.addLast("frameEncoder", new LengthFieldPrepender(4));
+                pipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, ParamConstant.FOUR, 0, ParamConstant.FOUR));
+                pipeline.addLast("frameEncoder", new LengthFieldPrepender(ParamConstant.FOUR));
                 //业务处理
                 pipeline.addLast(workerGroup, new TcpServerHandler());
             }
         });
-//	b.childOption(ChannelOption.SO_KEEPALIVE,true);
-        b.option(ChannelOption.SO_BACKLOG, 10000);
+        //b.childOption(ChannelOption.SO_KEEPALIVE,true);
+        b.option(ChannelOption.SO_BACKLOG, soBacklog);
         try {
             b.bind(ip, port).sync();
         } catch (InterruptedException e) {

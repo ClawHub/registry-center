@@ -1,8 +1,8 @@
 package com.clawhub.registrycenter.register;
 
 import com.alibaba.fastjson.JSONObject;
-import com.clawhub.registrycenter.core.ClientBean;
-import com.clawhub.registrycenter.core.ClientPool;
+import com.clawhub.registrycenter.client.ClientBean;
+import com.clawhub.registrycenter.client.ClientPool;
 import com.clawhub.registrycenter.util.RegisterKeyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,6 +90,9 @@ public class RegisterCore {
         });
     }
 
+    /**
+     * Close thread poll.
+     */
     @PreDestroy
     public void closeThreadPoll() {
         logger.info("注册核心关闭...");

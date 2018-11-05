@@ -1,6 +1,6 @@
 package com.clawhub.registrycenter.heartbeat;
 
-import com.clawhub.registrycenter.core.ClientBean;
+import com.clawhub.registrycenter.client.ClientBean;
 import com.clawhub.registrycenter.core.spring.SpringContextHelper;
 
 import java.util.List;
